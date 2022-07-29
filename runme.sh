@@ -165,7 +165,7 @@ if [ $a -eq 0 ]; then
     python3 -m pip install pyx
     AbortCheck
 
-    sudo pip3 install pyrealsense2
+    yes | sudo pip3 install pyrealsense2
     AbortCheck
 
 
@@ -189,56 +189,3 @@ if [ $a -eq 0 ]; then
     eval "$(cat ~/.bashrc | tail -n +10)"
 
 fi
-
-Tpath=$(pwd) 
-
-yes | sudo apt-get install python3-setuptools python3-rosinstall libeigen3-dev libboost-all-dev doxygen libopencv-dev ros-noetic-vision-opencv ros-noetic-image-transport-plugins ros-noetic-cmake-modules python3-software-properties software-properties-common libpoco-dev python3-matplotlib python3-scipy python3-git python3-pip ipython3 libtbb-dev libblas-dev liblapack-dev python3-catkin-tools libv4l-dev python3-osrf-pycommon libsuitesparse-dev python3-dev python3-wxgtk4.0 python3-tk python3-igraph wget autoconf automake nano
-
-python3 -m pip install pyx
-
-sudo pip3 install pyrealsense2
-
-sudo apt-get install ros-$ROS_DISTRO-realsense2-camera
-sudo apt-get install ros-$ROS_DISTRO-realsense2-description
-
-sudo apt-get install python3-rosdep
-sudo rosdep init
-rosdep update
-
-
-
-    # Ros related build so we can run via rosrun for osb-slam3
-    echo "export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:$Tpath/ORB_SLAM3/Examples/ROS" >> ~/.bashrc
-    #source ~/.bashrc
-    eval "$(cat ~/.bashrc | tail -n +10)"
-
-    chmod +x build_ros.sh
-    ./build_ros.sh
-    AbortCheck
-
-
-
-
-
-# Kalibr files
-mkdir -p kalibr_workspace/src
-AbortCheck
-
-cd kalibr_workspace/src
-git clone https://github.com/ori-drs/kalibr.git --branch noetic-devel
-cd ..
-
-catkin build -DCMAKE_BUILD_TYPE=Release -j4
-AbortCheck
-
-source ./devel/setup.bash
-echo "source $Tpath/kalibr_workspace/devel/setup.bash" >> ~/.bashrc
-
-#source ~/.bashrc
-eval "$(cat ~/.bashrc | tail -n +10)"
-
-
-
-
-rosdep install --from-paths ./ -iry
-
