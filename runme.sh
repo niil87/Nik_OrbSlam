@@ -41,7 +41,7 @@ if [ $a -eq 0 ]; then
     sudo make install
     AbortCheck
 
-    cd ..
+    cd ../..
 
     python3 cv2_check.py
     exit_code=$?
@@ -139,7 +139,5 @@ if [ $a -eq 0 ]; then
 
 fi
 
-    cd ORB_SLAM3
-    chmod +x build.sh
-    ./build.sh
+wget -r --cut-dirs=1 -nH -np -R "index.html*" http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/
 
