@@ -128,6 +128,11 @@ if [ %a% = 0 ]; then
     
     rm -rf temp.txt
 
+
+
+    sudo apt-get install -y libfmt-dev
+
+
 fi
 
 
