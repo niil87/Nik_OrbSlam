@@ -131,6 +131,12 @@ if [ $a -eq 0 ]; then
     sudo apt-get install ros-$ROS_DISTRO-realsense2-camera
     sudo apt-get install ros-$ROS_DISTRO-realsense2-description
 
+    sudo apt-get install python3-rosdep
+    sudo rosdep init
+    rosdep update
+
+
+
     # ORB-SLAM related files
     sudo apt-get install -y libfmt-dev
 
@@ -152,7 +158,23 @@ if [ $a -eq 0 ]; then
 
 
     # Kalibr files
+    mkdir -p kalibr_workspace/src
+    AbortCheck
+
+    cd kalibr_workspace/src
+    AbortCheck
+
     git clone https://github.com/ori-drs/kalibr.git --branch noetic-devel
+    cd ..
+
+    catkin build -DCMAKE_BUILD_TYPE=Release -j4
+    AbortCheck
+
+    source ./devel/setup.bash
+    echo "source $Tpath/kalibr_workspace/src/devel/setup.bash" >> ~/.bashrc
+
+    #source ~/.bashrc
+    eval "$(cat ~/.bashrc | tail -n +10)"
 
 fi
 
@@ -165,8 +187,30 @@ sudo pip3 install pyrealsense2
 sudo apt-get install ros-$ROS_DISTRO-realsense2-camera
 sudo apt-get install ros-$ROS_DISTRO-realsense2-description
 
+sudo apt-get install python3-rosdep
+sudo rosdep init
+rosdep update
+
+
 # Kalibr files
+mkdir -p kalibr_workspace/src
+AbortCheck
+
+cd kalibr_workspace/src
 git clone https://github.com/ori-drs/kalibr.git --branch noetic-devel
+cd ..
+
+catkin build -DCMAKE_BUILD_TYPE=Release -j4
+AbortCheck
+
+source ./devel/setup.bash
+echo "source $Tpath/kalibr_workspace/src/devel/setup.bash" >> ~/.bashrc
+
+#source ~/.bashrc
+eval "$(cat ~/.bashrc | tail -n +10)"
+
+
+
 
 rosdep install --from-paths ./ -iry
 
