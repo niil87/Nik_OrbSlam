@@ -4,7 +4,7 @@ AbortCheck() {
 }
 
 a=1
-if [ %a% = 0 ]; then
+if [ $a -eq 0 ]; then
     sudo apt update
     sudo apt install software-properties-common
     sudo add-apt-repository ppa:deadsnakes/ppa
@@ -129,10 +129,17 @@ if [ %a% = 0 ]; then
     rm -rf temp.txt
 
 
-
+    # ORB-SLAM related files
     sudo apt-get install -y libfmt-dev
+
+    cd ORB_SLAM3
+    chmod +x build.sh
+    ./build.sh
 
 
 fi
 
+    cd ORB_SLAM3
+    chmod +x build.sh
+    ./build.sh
 
