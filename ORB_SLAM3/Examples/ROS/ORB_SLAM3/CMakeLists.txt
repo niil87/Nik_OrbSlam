@@ -73,9 +73,9 @@ ${LIBS}
 #src/AR/ViewerAR.cc
 #)
 
-target_link_libraries(MonoAR
-${LIBS}
-)
+#target_link_libraries(MonoAR
+#${LIBS}
+#)
 
 # Node for stereo camera
 rosbuild_add_executable(Stereo

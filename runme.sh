@@ -78,8 +78,8 @@ if [ $a -eq 0 ]; then
     cd ..
 
 
-    # Eigen3 but this is already installed via pre-requisities in Pangolin 
-    yes | sudo apt install libeigen3-dev
+    ## Eigen3 but this is already installed via pre-requisities in Pangolin 
+    #yes | sudo apt install libeigen3-dev
 
 
     # installing ros-neotic
@@ -143,6 +143,18 @@ if [ $a -eq 0 ]; then
     cd ORB_SLAM3
     chmod +x build.sh
     ./build.sh
+    AbortCheck
+
+    # Ros related build so we can run via rosrun for osb-slam3
+    echo "export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:$Tpath/ORB_SLAM3/Examples/ROS" >> ~/.bashrc
+    #source ~/.bashrc
+    eval "$(cat ~/.bashrc | tail -n +10)"
+
+    chmod +x build_ros.sh
+    ./build_ros.sh
+    AbortCheck
+
+    cd ..
 
     # The EuroC Data set! Will take a long time to complete!
     wget -r --cut-dirs=1 -nH -np -R "index.html*" http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/
@@ -171,12 +183,14 @@ if [ $a -eq 0 ]; then
     AbortCheck
 
     source ./devel/setup.bash
-    echo "source $Tpath/kalibr_workspace/src/devel/setup.bash" >> ~/.bashrc
+    echo "source $Tpath/kalibr_workspace/devel/setup.bash" >> ~/.bashrc
 
     #source ~/.bashrc
     eval "$(cat ~/.bashrc | tail -n +10)"
 
 fi
+
+Tpath=$(pwd) 
 
 yes | sudo apt-get install python3-setuptools python3-rosinstall libeigen3-dev libboost-all-dev doxygen libopencv-dev ros-noetic-vision-opencv ros-noetic-image-transport-plugins ros-noetic-cmake-modules python3-software-properties software-properties-common libpoco-dev python3-matplotlib python3-scipy python3-git python3-pip ipython3 libtbb-dev libblas-dev liblapack-dev python3-catkin-tools libv4l-dev python3-osrf-pycommon libsuitesparse-dev python3-dev python3-wxgtk4.0 python3-tk python3-igraph wget autoconf automake nano
 
@@ -192,6 +206,20 @@ sudo rosdep init
 rosdep update
 
 
+
+    # Ros related build so we can run via rosrun for osb-slam3
+    echo "export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:$Tpath/ORB_SLAM3/Examples/ROS" >> ~/.bashrc
+    #source ~/.bashrc
+    eval "$(cat ~/.bashrc | tail -n +10)"
+
+    chmod +x build_ros.sh
+    ./build_ros.sh
+    AbortCheck
+
+
+
+
+
 # Kalibr files
 mkdir -p kalibr_workspace/src
 AbortCheck
@@ -204,7 +232,7 @@ catkin build -DCMAKE_BUILD_TYPE=Release -j4
 AbortCheck
 
 source ./devel/setup.bash
-echo "source $Tpath/kalibr_workspace/src/devel/setup.bash" >> ~/.bashrc
+echo "source $Tpath/kalibr_workspace/devel/setup.bash" >> ~/.bashrc
 
 #source ~/.bashrc
 eval "$(cat ~/.bashrc | tail -n +10)"
