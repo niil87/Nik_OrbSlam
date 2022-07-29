@@ -128,6 +128,8 @@ if [ $a -eq 0 ]; then
     
     rm -rf temp.txt
 
+    sudo apt-get install ros-$ROS_DISTRO-realsense2-camera
+    sudo apt-get install ros-$ROS_DISTRO-realsense2-description
 
     # ORB-SLAM related files
     sudo apt-get install -y libfmt-dev
@@ -136,8 +138,35 @@ if [ $a -eq 0 ]; then
     chmod +x build.sh
     ./build.sh
 
+    # The EuroC Data set! Will take a long time to complete!
+    wget -r --cut-dirs=1 -nH -np -R "index.html*" http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/
+
+    yes | sudo apt-get install python3-setuptools python3-rosinstall libeigen3-dev libboost-all-dev doxygen libopencv-dev ros-noetic-vision-opencv ros-noetic-image-transport-plugins ros-noetic-cmake-modules python3-software-properties software-properties-common libpoco-dev python3-matplotlib python3-scipy python3-git python3-pip ipython3 libtbb-dev libblas-dev liblapack-dev python3-catkin-tools libv4l-dev python3-osrf-pycommon libsuitesparse-dev python3-dev python3-wxgtk4.0 python3-tk python3-igraph wget autoconf automake nano
+    AbortCheck
+
+    python3 -m pip install pyx
+    AbortCheck
+
+    sudo pip3 install pyrealsense2
+    AbortCheck
+
+
+    # Kalibr files
+    git clone https://github.com/ori-drs/kalibr.git --branch noetic-devel
 
 fi
 
-wget -r --cut-dirs=1 -nH -np -R "index.html*" http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/
+yes | sudo apt-get install python3-setuptools python3-rosinstall libeigen3-dev libboost-all-dev doxygen libopencv-dev ros-noetic-vision-opencv ros-noetic-image-transport-plugins ros-noetic-cmake-modules python3-software-properties software-properties-common libpoco-dev python3-matplotlib python3-scipy python3-git python3-pip ipython3 libtbb-dev libblas-dev liblapack-dev python3-catkin-tools libv4l-dev python3-osrf-pycommon libsuitesparse-dev python3-dev python3-wxgtk4.0 python3-tk python3-igraph wget autoconf automake nano
+
+python3 -m pip install pyx
+
+sudo pip3 install pyrealsense2
+
+sudo apt-get install ros-$ROS_DISTRO-realsense2-camera
+sudo apt-get install ros-$ROS_DISTRO-realsense2-description
+
+# Kalibr files
+git clone https://github.com/ori-drs/kalibr.git --branch noetic-devel
+
+rosdep install --from-paths ./ -iry
 
