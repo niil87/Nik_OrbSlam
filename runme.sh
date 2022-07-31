@@ -25,8 +25,7 @@ if [ $a -eq 0 ]; then
     yes | sudo apt-get install libgtk-3-dev
     AbortCheck
 
-    git clone https://github.com/opencv/opencv.git
-    AbortCheck
+    git clone https://github.com/opencv/opencv.git; AbortCheck
 
     # installing cv2
     cd opencv
@@ -35,11 +34,9 @@ if [ $a -eq 0 ]; then
     cmake ../
     AbortCheck
 
-    make
-    AbortCheck
+    make; AbortCheck
 
-    sudo make install
-    AbortCheck
+    sudo make install; AbortCheck
 
     cd ../..
 
@@ -69,12 +66,9 @@ if [ $a -eq 0 ]; then
     git clone --recursive https://github.com/stevenlovegrove/Pangolin.git
     cd Pangolin
     yes | ./scripts/install_prerequisites.sh recommended
-    yes | cmake -B build
-    AbortCheck
-    cmake --build build
-    AbortCheck
-    cmake --build build -t pypangolin_pip_install
-    AbortCheck
+    yes | cmake -B build; AbortCheck
+    cmake --build build; AbortCheck
+    cmake --build build -t pypangolin_pip_install; AbortCheck
     cd ..
 
 
@@ -162,25 +156,20 @@ if [ $a -eq 0 ]; then
     yes | sudo apt-get install python3-setuptools python3-rosinstall libeigen3-dev libboost-all-dev doxygen libopencv-dev ros-noetic-vision-opencv ros-noetic-image-transport-plugins ros-noetic-cmake-modules python3-software-properties software-properties-common libpoco-dev python3-matplotlib python3-scipy python3-git python3-pip ipython3 libtbb-dev libblas-dev liblapack-dev python3-catkin-tools libv4l-dev python3-osrf-pycommon libsuitesparse-dev python3-dev python3-wxgtk4.0 python3-tk python3-igraph wget autoconf automake nano
     AbortCheck
 
-    python3 -m pip install pyx
-    AbortCheck
+    python3 -m pip install pyx; AbortCheck
 
-    yes | sudo pip3 install pyrealsense2
-    AbortCheck
+    yes | sudo pip3 install pyrealsense2; AbortCheck
 
 
     # Kalibr files
-    mkdir -p kalibr_workspace/src
-    AbortCheck
+    mkdir -p kalibr_workspace/src; AbortCheck
 
-    cd kalibr_workspace/src
-    AbortCheck
+    cd kalibr_workspace/src; AbortCheck
 
     git clone https://github.com/ori-drs/kalibr.git --branch noetic-devel
     cd ..
 
-    catkin build -DCMAKE_BUILD_TYPE=Release -j4
-    AbortCheck
+    catkin build -DCMAKE_BUILD_TYPE=Release -j4; AbortCheck
 
     source ./devel/setup.bash
     echo "source $Tpath/kalibr_workspace/devel/setup.bash" >> ~/.bashrc
