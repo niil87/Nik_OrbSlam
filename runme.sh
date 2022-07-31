@@ -31,7 +31,7 @@ if [ $a -eq 0 ]; then
     cd opencv
     mkdir build
     cd build
-    cmake ../
+    cmake ..
     AbortCheck
 
     make; AbortCheck
@@ -65,7 +65,7 @@ if [ $a -eq 0 ]; then
     # Get Pangolin
     git clone --recursive https://github.com/stevenlovegrove/Pangolin.git
     cd Pangolin
-    yes | ./scripts/install_prerequisites.sh recommended
+    yes | sudo apt-get install libglew-dev libboost-dev libboost-thread-dev libboost-filesystem-dev libpython3-dev build-essential
     yes | cmake -B build; AbortCheck
     cmake --build build; AbortCheck
     cmake --build build -t pypangolin_pip_install; AbortCheck
