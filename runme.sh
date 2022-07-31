@@ -5,10 +5,10 @@ AbortCheck() {
 
 a=1
 if [ $a -eq 0 ]; then
-    sudo apt update
-    sudo apt install software-properties-common
-    sudo add-apt-repository ppa:deadsnakes/ppa
-    sudo apt update
+    yes | sudo apt update
+    yes | sudo apt install software-properties-common
+    yes | sudo add-apt-repository ppa:deadsnakes/ppa
+    yes | sudo apt update
     yes | sudo apt install python3.8
 
 
@@ -50,7 +50,7 @@ if [ $a -eq 0 ]; then
     -D INSTALL_C_EXAMPLES=ON \
     -D INSTALL_PYTHON_EXAMPLES=ON \
     -D OPENCV_GENERATE_PKGCONFIG=ON \
-    -D OPENCV_EXTRA_MODULES_PATH=~/opencv_build/opencv_contrib/modules \
+    -D OPENCV_EXTRA_MODULES_PATH=$Tpath/opencv_build/opencv_contrib/modules \
     -D BUILD_EXAMPLES=ON ..
     AbortCheck
 
