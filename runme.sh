@@ -22,9 +22,7 @@ if [ $a -eq 0 ]; then
 
     yes | sudo apt-get install cmake gcc g++ python3-dev python3-numpy python3-pip; AbortCheck
 
-    yes | sudo apt-get install libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev; AbortCheck
-
-    yes | sudo apt-get install libgtk-3-dev; AbortCheck
+    # yes | sudo apt-get install libgtk-3-dev; AbortCheck
 
     
 
