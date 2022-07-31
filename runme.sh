@@ -9,36 +9,56 @@ if [ $a -eq 0 ]; then
     sudo apt install software-properties-common
     sudo add-apt-repository ppa:deadsnakes/ppa
     sudo apt update
+    yes | sudo apt install python3.8
+
 
     # Getting number of processors to perform "make" faster
     Nproc=$(nproc)
+    # To keep track of path
+    Tpath=$(pwd)
 
-    yes | sudo apt install python3.8
 
     yes | sudo apt install git vim curl
 
     yes | sudo apt-get install cmake gcc g++ python3-dev python3-numpy python3-pip; AbortCheck
 
-    yes | sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev; AbortCheck
-
     yes | sudo apt-get install libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev; AbortCheck
 
     yes | sudo apt-get install libgtk-3-dev; AbortCheck
 
-    git clone https://github.com/opencv/opencv.git; AbortCheck
+    
+
 
     # installing cv2
+
+    sudo apt install build-essential pkg-config libgtk-3-dev \
+    libavcodec-dev libavformat-dev libswscale-dev libv4l-dev \
+    libxvidcore-dev libx264-dev libjpeg-dev libpng-dev libtiff-dev \
+    gfortran openexr libatlas-base-dev python3-dev python3-numpy \
+    libtbb2 libtbb-dev libdc1394-22-dev libopenexr-dev \
+    libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev
+
+    mkdir opencv_build && cd opencv_build
+    git clone https://github.com/opencv/opencv.git
+    git clone https://github.com/opencv/opencv_contrib.git
+
     cd opencv
-    mkdir build
-    cd build
-    cmake ..
+    mkdir -p build && cd build
+
+    cmake -D CMAKE_BUILD_TYPE=RELEASE \
+    -D CMAKE_INSTALL_PREFIX=/usr/local \
+    -D INSTALL_C_EXAMPLES=ON \
+    -D INSTALL_PYTHON_EXAMPLES=ON \
+    -D OPENCV_GENERATE_PKGCONFIG=ON \
+    -D OPENCV_EXTRA_MODULES_PATH=~/opencv_build/opencv_contrib/modules \
+    -D BUILD_EXAMPLES=ON ..
     AbortCheck
 
     make -j$Nproc; AbortCheck
 
     sudo make install; AbortCheck
 
-    cd ../..
+    cd $Tpath
 
     python3 cv2_check.py
     exit_code=$?
@@ -51,6 +71,8 @@ if [ $a -eq 0 ]; then
         AbortCheck
     fi
 
+
+
     # installing librealsense
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
     
@@ -62,14 +84,17 @@ if [ $a -eq 0 ]; then
     yes | sudo apt-get install librealsense2-dbg
 
 
+
     # Get Pangolin
+    yes | sudo apt-get install libglew-dev libboost-dev libboost-thread-dev libboost-filesystem-dev libpython3-dev build-essential libeigen3-dev; AbortCheck
+    
     git clone --recursive https://github.com/stevenlovegrove/Pangolin.git
     cd Pangolin
-    yes | sudo apt-get install libglew-dev libboost-dev libboost-thread-dev libboost-filesystem-dev libpython3-dev build-essential libeigen3-dev; AbortCheck
-    yes | cmake -B build; AbortCheck
-    cmake --build build; AbortCheck
-    cmake --build build -t pypangolin_pip_install; AbortCheck
-    cd ..
+    mkdir -p build && cd build
+    cmake ..; AbortCheck
+    make -j$Nproc; AbortCheck
+    
+    cd $Tpath
 
 
     ## Eigen3 but this is already installed via pre-requisities in Pangolin 
@@ -94,8 +119,6 @@ if [ $a -eq 0 ]; then
 
 
     # Verify Noetic installation
-    Tpath=$(pwd)
-    
     roscd
     
     File=temp.txt
@@ -169,7 +192,7 @@ if [ $a -eq 0 ]; then
     git clone https://github.com/ori-drs/kalibr.git --branch noetic-devel
     cd ..
 
-    catkin build -DCMAKE_BUILD_TYPE=Release -j4; AbortCheck
+    catkin build -DCMAKE_BUILD_TYPE=Release -j$Nproc; AbortCheck
 
     source ./devel/setup.bash
     echo "source $Tpath/kalibr_workspace/devel/setup.bash" >> ~/.bashrc
