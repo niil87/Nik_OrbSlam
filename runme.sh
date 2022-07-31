@@ -145,10 +145,10 @@ if [ $a -eq 0 ]; then
     
     rm -rf temp.txt
 
-    sudo apt-get install ros-$ROS_DISTRO-realsense2-camera
-    sudo apt-get install ros-$ROS_DISTRO-realsense2-description
+    yes | sudo apt-get install ros-$ROS_DISTRO-realsense2-camera
+    yes | sudo apt-get install ros-$ROS_DISTRO-realsense2-description
 
-    sudo apt-get install python3-rosdep
+    yes | sudo apt-get install python3-rosdep
     sudo rosdep init
     rosdep update
 
