@@ -9,21 +9,21 @@ if [ $a -eq 0 ]; then
     sudo apt install software-properties-common
     sudo add-apt-repository ppa:deadsnakes/ppa
     sudo apt update
+
+    # Getting number of processors to perform "make" faster
+    Nproc=$(nproc)
+
     yes | sudo apt install python3.8
 
     yes | sudo apt install git vim curl
 
-    yes | sudo apt-get install cmake gcc g++ python3-dev python3-numpy python3-pip
-    AbortCheck
+    yes | sudo apt-get install cmake gcc g++ python3-dev python3-numpy python3-pip; AbortCheck
 
-    yes | sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev
-    AbortCheck
+    yes | sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev; AbortCheck
 
-    yes | sudo apt-get install libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev
-    AbortCheck
+    yes | sudo apt-get install libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev; AbortCheck
 
-    yes | sudo apt-get install libgtk-3-dev
-    AbortCheck
+    yes | sudo apt-get install libgtk-3-dev; AbortCheck
 
     git clone https://github.com/opencv/opencv.git; AbortCheck
 
@@ -34,7 +34,7 @@ if [ $a -eq 0 ]; then
     cmake ..
     AbortCheck
 
-    make; AbortCheck
+    make -j$Nproc; AbortCheck
 
     sudo make install; AbortCheck
 
@@ -65,7 +65,7 @@ if [ $a -eq 0 ]; then
     # Get Pangolin
     git clone --recursive https://github.com/stevenlovegrove/Pangolin.git
     cd Pangolin
-    yes | sudo apt-get install libglew-dev libboost-dev libboost-thread-dev libboost-filesystem-dev libpython3-dev build-essential
+    yes | sudo apt-get install libglew-dev libboost-dev libboost-thread-dev libboost-filesystem-dev libpython3-dev build-essential libeigen3-dev; AbortCheck
     yes | cmake -B build; AbortCheck
     cmake --build build; AbortCheck
     cmake --build build -t pypangolin_pip_install; AbortCheck
@@ -151,7 +151,7 @@ if [ $a -eq 0 ]; then
     cd ..
 
     # The EuroC Data set! Will take a long time to complete!
-    wget -r --cut-dirs=1 -nH -np -R "index.html*" http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/
+    wget -r --cut-dirs=1 -nH -np -R "index.html*" http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/machine_hall/MH_01_easy
 
     yes | sudo apt-get install python3-setuptools python3-rosinstall libeigen3-dev libboost-all-dev doxygen libopencv-dev ros-noetic-vision-opencv ros-noetic-image-transport-plugins ros-noetic-cmake-modules python3-software-properties software-properties-common libpoco-dev python3-matplotlib python3-scipy python3-git python3-pip ipython3 libtbb-dev libblas-dev liblapack-dev python3-catkin-tools libv4l-dev python3-osrf-pycommon libsuitesparse-dev python3-dev python3-wxgtk4.0 python3-tk python3-igraph wget autoconf automake nano
     AbortCheck
