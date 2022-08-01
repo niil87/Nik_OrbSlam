@@ -59,15 +59,13 @@ if [ $a -eq 0 ]; then
 
     cd $Tpath
 
-    python3 cv2_check.py
-    exit_code=$?
-    if [[ $exit_code -ne 0 ]]; then
-        echo "in code"
+    # checking if cv2 is accessible in python
+    python3 -c "import cv2; print(cv2.__version__)"
+    if [[ $? -ne 0 ]]; then
         echo export PYTHONPATH="${PYTHONPATH}:/usr/local/lib/python3.8/site-packages" >> ~/.bashrc
         #source ~/.bashrc
         eval "$(cat ~/.bashrc | tail -n +10)"
-        python3 cv2_check.py
-        AbortCheck
+        python3 -c "import cv2; print(cv2.__version__)"; AbortCheck
     fi
 
 
