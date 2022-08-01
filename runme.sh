@@ -160,7 +160,7 @@ if [ $a -eq 0 ]; then
     AbortCheck
 
     # Ros related build so we can run via rosrun for osb-slam3
-    echo "export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:$Tpath/ORB_SLAM3/Examples/ROS" >> ~/.bashrc
+    echo export ROS_PACKAGE_PATH="${ROS_PACKAGE_PATH}:$Tpath/ORB_SLAM3/Examples/ROS" >> ~/.bashrc
     #source ~/.bashrc
     eval "$(cat ~/.bashrc | tail -n +10)"
 
@@ -176,7 +176,7 @@ if [ $a -eq 0 ]; then
     unzip ijrr_euroc_mav_dataset/machine_hall/MH_01_easy/MH_01_easy.zip -d ijrr_euroc_mav_dataset/machine_hall/MH_01_easy/MH_01_easy; AbortCheck 
 
 
-    yes | sudo apt-get install python3-setuptools libboost-all-dev doxygen ros-noetic-image-transport-plugins python3-software-properties libpoco-dev python3-matplotlib python3-scipy python3-git ipython3 libblas-dev liblapack-dev python3-catkin-tools libv4l-dev python3-osrf-pycommon libsuitesparse-dev python3-wxgtk4.0 python3-tk python3-igraph autoconf automake nano
+    yes | sudo apt-get install python3-setuptools libboost-all-dev doxygen ros-noetic-image-transport-plugins python3-software-properties libpoco-dev python3-matplotlib python3-scipy python3-git ipython3 libblas-dev liblapack-dev python3-catkin-tools libv4l-dev python3-osrf-pycommon libsuitesparse-dev python3-wxgtk4.0 python3-tk python3-igraph autoconf automake nano texlive-binaries
     AbortCheck
 
     python3 -m pip install pyx; AbortCheck
