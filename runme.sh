@@ -34,7 +34,7 @@ if [ $a -eq 0 ]; then
     libxvidcore-dev libx264-dev libjpeg-dev libpng-dev libtiff-dev \
     gfortran openexr libatlas-base-dev python3-dev python3-numpy \
     libtbb2 libtbb-dev libdc1394-22-dev libopenexr-dev \
-    libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev
+    libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev libssl-dev
     AbortCheck
 
     mkdir opencv_build && cd opencv_build
@@ -74,6 +74,8 @@ if [ $a -eq 0 ]; then
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
     
     sudo add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main" -u
+
+    sudo apt update
 
     yes | sudo apt-get install librealsense2-dkms
     yes | sudo apt-get install librealsense2-utils
@@ -145,7 +147,8 @@ if [ $a -eq 0 ]; then
     yes | sudo apt-get install ros-$ROS_DISTRO-realsense2-camera
     yes | sudo apt-get install ros-$ROS_DISTRO-realsense2-description
 
-    yes | sudo apt-get install python3-rosdep
+    # http://wiki.ros.org/noetic/Installation/Ubuntu
+    yes | sudo apt-get install python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool
     sudo rosdep init
     rosdep update
 
@@ -199,5 +202,7 @@ if [ $a -eq 0 ]; then
 
     #source ~/.bashrc
     eval "$(cat ~/.bashrc | tail -n +10)"
+
+    echo "Installation Complete. DO NOT THIS Terminal, please close and open new Terminal"
 
 fi
