@@ -3,7 +3,7 @@ AbortCheck() {
    if [ $? -ne 0 ]; then echo "Error in installation hence aborting"; exit /b 0; fi
 }
 
-a=1
+a=0
 if [ $a -eq 0 ]; then
     yes | sudo apt update
     yes | sudo apt install software-properties-common

@@ -51,25 +51,27 @@ If you use ORB-SLAM3 in an academic work, please cite:
      }
 
 # 2. Prerequisites
-We have tested the library in **Ubuntu 16.04** and **18.04**, but it should be easy to compile in other platforms. A powerful computer (e.g. i7) will ensure real-time performance and provide more stable and accurate results.
+The original git repository was tested using library in **Ubuntu 16.04** and **18.04**, but this specific git repository was tested only on **20.04**. A powerful computer (e.g. i7) will ensure real-time performance and provide more stable and accurate results.
 
 ## C++11 or C++0x Compiler
 We use the new thread and chrono functionalities of C++11.
 
+## All of the below packages are installed as part of runme.sh, please do not reinstall unless you follow steps from runme.sh. This file is located one level above.
+
 ## Pangolin
-We use [Pangolin](https://github.com/stevenlovegrove/Pangolin) for visualization and user interface. Dowload and install instructions can be found at: https://github.com/stevenlovegrove/Pangolin.
+We use [Pangolin](https://github.com/stevenlovegrove/Pangolin) for visualization and user interface.
 
 ## OpenCV
-We use [OpenCV](http://opencv.org) to manipulate images and features. Dowload and install instructions can be found at: http://opencv.org. **Required at leat 3.0. Tested with OpenCV 3.2.0 and 4.4.0**.
+We use [OpenCV](http://opencv.org) to manipulate images and features.
 
 ## Eigen3
-Required by g2o (see below). Download and install instructions can be found at: http://eigen.tuxfamily.org. **Required at least 3.1.0**.
+Required by g2o (see below).
 
 ## DBoW2 and g2o (Included in Thirdparty folder)
 We use modified versions of the [DBoW2](https://github.com/dorian3d/DBoW2) library to perform place recognition and [g2o](https://github.com/RainerKuemmerle/g2o) library to perform non-linear optimizations. Both modified libraries (which are BSD) are included in the *Thirdparty* folder.
 
 ## Python
-Required to calculate the alignment of the trajectory with the ground truth. **Required Numpy module**.
+Required to calculate the alignment of the trajectory with the ground truth. **Required Numpy module**. Only Python3.8 was tested.
 
 * (win) http://www.python.org/downloads/windows
 * (deb) `sudo apt install libpython2.7-dev`
@@ -77,23 +79,16 @@ Required to calculate the alignment of the trajectory with the ground truth. **R
 
 ## ROS (optional)
 
-We provide some examples to process input of a monocular, monocular-inertial, stereo, stereo-inertial or RGB-D camera using ROS. Building these examples is optional. These have been tested with ROS Melodic under Ubuntu 18.04.
+We provide some examples to process input of a monocular, monocular-inertial, stereo, stereo-inertial or RGB-D camera using ROS. Building these examples is optional. These have been tested with ROS Noetic under Ubuntu 20.04.
 
 # 3. Building ORB-SLAM3 library and examples
 
-Clone the repository:
+Original repository:
 ```
-git clone https://github.com/UZ-SLAMLab/ORB_SLAM3.git ORB_SLAM3
+https://github.com/UZ-SLAMLab/ORB_SLAM3.git ORB_SLAM3
 ```
+Do not use this, as it has issues with newer Ubuntu and software packages.
 
-We provide a script `build.sh` to build the *Thirdparty* libraries and *ORB-SLAM3*. Please make sure you have installed all required dependencies (see section 2). Execute:
-```
-cd ORB_SLAM3
-chmod +x build.sh
-./build.sh
-```
-
-This will create **libORB_SLAM3.so**  at *lib* folder and the executables in *Examples* folder.
 
 # 4. Running ORB-SLAM3 with your camera
 
@@ -154,24 +149,7 @@ Execute the following script to process sequences and compute the RMS ATE:
 # 7. ROS Examples
 
 ### Building the nodes for mono, mono-inertial, stereo, stereo-inertial and RGB-D
-Tested with ROS Melodic and ubuntu 18.04.
-
-1. Add the path including *Examples/ROS/ORB_SLAM3* to the ROS_PACKAGE_PATH environment variable. Open .bashrc file:
-  ```
-  gedit ~/.bashrc
-  ```
-and add at the end the following line. Replace PATH by the folder where you cloned ORB_SLAM3:
-
-  ```
-  export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:PATH/ORB_SLAM3/Examples/ROS
-  ```
-  
-2. Execute `build_ros.sh` script:
-
-  ```
-  chmod +x build_ros.sh
-  ./build_ros.sh
-  ```
+Tested with ROS Noetic and ubuntu 20.04. It will be installed as part of runme.sh script.
   
 ### Running Monocular Node
 For a monocular input from topic `/camera/image_raw` run node ORB_SLAM3/Mono. You will need to provide the vocabulary file and a settings file. See the monocular examples above.
