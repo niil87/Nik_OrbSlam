@@ -18,7 +18,7 @@ if [ $a -eq 0 ]; then
     Tpath=$(pwd)
 
 
-    yes | sudo apt install git vim curl
+    yes | sudo apt install git vim curl unzip
 
     yes | sudo apt-get install cmake gcc g++ python3-dev python3-numpy python3-pip; AbortCheck
 
@@ -171,7 +171,10 @@ if [ $a -eq 0 ]; then
     cd ..
 
     # The EuroC Data set! Will take a long time to complete!
-    wget -r --cut-dirs=1 -nH -np -R "index.html*" http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/machine_hall/MH_01_easy/
+    wget -r --cut-dirs=1 -nH -np -R "index.html*" http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/machine_hall/MH_01_easy/; AbortCheck
+
+    unzip ijrr_euroc_mav_dataset/machine_hall/MH_01_easy/MH_01_easy.zip -d ijrr_euroc_mav_dataset/machine_hall/MH_01_easy/MH_01_easy; AbortCheck 
+
 
     yes | sudo apt-get install python3-setuptools libboost-all-dev doxygen ros-noetic-image-transport-plugins python3-software-properties libpoco-dev python3-matplotlib python3-scipy python3-git ipython3 libblas-dev liblapack-dev python3-catkin-tools libv4l-dev python3-osrf-pycommon libsuitesparse-dev python3-wxgtk4.0 python3-tk python3-igraph autoconf automake nano
     AbortCheck
