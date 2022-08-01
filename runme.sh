@@ -175,7 +175,7 @@ if [ $a -eq 0 ]; then
     # The EuroC Data set! Will take a long time to complete!
     wget -r --cut-dirs=1 -nH -np -R "index.html*" http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/machine_hall/MH_01_easy/
 
-    yes | sudo apt-get install python3-setuptools python3-rosinstall libboost-all-dev doxygen libopencv-dev ros-noetic-vision-opencv ros-noetic-image-transport-plugins ros-noetic-cmake-modules python3-software-properties libpoco-dev python3-matplotlib python3-scipy python3-git ipython3 libblas-dev liblapack-dev python3-catkin-tools libv4l-dev python3-osrf-pycommon libsuitesparse-dev python3-wxgtk4.0 python3-tk python3-igraph autoconf automake nano
+    yes | sudo apt-get install python3-setuptools libboost-all-dev doxygen ros-noetic-image-transport-plugins python3-software-properties libpoco-dev python3-matplotlib python3-scipy python3-git ipython3 libblas-dev liblapack-dev python3-catkin-tools libv4l-dev python3-osrf-pycommon libsuitesparse-dev python3-wxgtk4.0 python3-tk python3-igraph autoconf automake nano
     AbortCheck
 
     python3 -m pip install pyx; AbortCheck
