@@ -73,13 +73,10 @@ We use modified versions of the [DBoW2](https://github.com/dorian3d/DBoW2) libra
 ## Python
 Required to calculate the alignment of the trajectory with the ground truth. **Required Numpy module**. Only Python3.8 was tested.
 
-* (win) http://www.python.org/downloads/windows
-* (deb) `sudo apt install libpython2.7-dev`
-* (mac) preinstalled with osx
-
 ## ROS (optional)
 
 We provide some examples to process input of a monocular, monocular-inertial, stereo, stereo-inertial or RGB-D camera using ROS. Building these examples is optional. These have been tested with ROS Noetic under Ubuntu 20.04.
+
 
 # 3. Building ORB-SLAM3 library and examples
 
@@ -88,6 +85,12 @@ Original repository:
 https://github.com/UZ-SLAMLab/ORB_SLAM3.git ORB_SLAM3
 ```
 Do not use this, as it has issues with newer Ubuntu and software packages.
+
+New repository:
+```
+https://github.com/niil87/Nik_OrbSlam.git
+```
+
 
 
 # 4. Running ORB-SLAM3 with your camera
