@@ -100,7 +100,7 @@ if [ $a -eq 0 ]; then
     #yes | sudo apt install libeigen3-dev
 
 
-    # installing ros-neotic
+    # installing ros-noetic
     echo "deb http://packages.ros.org/ros/ubuntu focal main" | sudo tee /etc/apt/sources.list.d/ros-focal.list
 
     sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
@@ -175,7 +175,7 @@ if [ $a -eq 0 ]; then
     # The EuroC Data set! Will take a long time to complete!
     wget -r --cut-dirs=1 -nH -np -R "index.html*" http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/machine_hall/MH_01_easy/
 
-    yes | sudo apt-get install python3-setuptools python3-rosinstall libeigen3-dev libboost-all-dev doxygen libopencv-dev ros-noetic-vision-opencv ros-noetic-image-transport-plugins ros-noetic-cmake-modules python3-software-properties software-properties-common libpoco-dev python3-matplotlib python3-scipy python3-git python3-pip ipython3 libtbb-dev libblas-dev liblapack-dev python3-catkin-tools libv4l-dev python3-osrf-pycommon libsuitesparse-dev python3-dev python3-wxgtk4.0 python3-tk python3-igraph wget autoconf automake nano
+    yes | sudo apt-get install python3-setuptools python3-rosinstall libboost-all-dev doxygen libopencv-dev ros-noetic-vision-opencv ros-noetic-image-transport-plugins ros-noetic-cmake-modules python3-software-properties libpoco-dev python3-matplotlib python3-scipy python3-git ipython3 libblas-dev liblapack-dev python3-catkin-tools libv4l-dev python3-osrf-pycommon libsuitesparse-dev python3-wxgtk4.0 python3-tk python3-igraph autoconf automake nano
     AbortCheck
 
     python3 -m pip install pyx; AbortCheck
