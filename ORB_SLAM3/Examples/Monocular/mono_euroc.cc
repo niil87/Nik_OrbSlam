@@ -16,10 +16,13 @@
 * If not, see <http://www.gnu.org/licenses/>.
 */
 
+
 #include<iostream>
 #include<algorithm>
 #include<fstream>
 #include<chrono>
+#include <ctime>
+#include <sstream>
 
 #include<opencv2/core/core.hpp>
 
@@ -31,7 +34,7 @@ void LoadImages(const string &strImagePath, const string &strPathTimes,
                 vector<string> &vstrImages, vector<double> &vTimeStamps);
 
 int main(int argc, char **argv)
-{  
+{
     if(argc < 5)
     {
         cerr << endl << "Usage: ./mono_euroc path_to_vocabulary path_to_settings path_to_sequence_folder_1 path_to_times_file_1 (path_to_image_folder_2 path_to_times_file_2 ... path_to_image_folder_N path_to_times_file_N) (trajectory_file_name)" << endl;
@@ -62,7 +65,13 @@ int main(int argc, char **argv)
     for (seq = 0; seq<num_seq; seq++)
     {
         cout << "Loading images for sequence " << seq << "...";
-        LoadImages(string(argv[(2*seq)+3]) + "/mav0/cam0/data", string(argv[(2*seq)+4]), vstrImageFilenames[seq], vTimestampsCam[seq]);
+
+        string pathSeq(argv[(2*seq) + 3]);
+        string pathTimeStamps(argv[(2*seq) + 4]);
+
+        string pathCam0 = pathSeq + "/mav0/cam0/data";
+
+        LoadImages(pathCam0, pathTimeStamps, vstrImageFilenames[seq], vTimestampsCam[seq]);
         cout << "LOADED!" << endl;
 
         nImages[seq] = vstrImageFilenames[seq].size();
@@ -76,11 +85,8 @@ int main(int argc, char **argv)
     cout << endl << "-------" << endl;
     cout.precision(17);
 
-
-    int fps = 20;
-    float dT = 1.f/fps;
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
-    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::MONOCULAR, false);
+    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::MONOCULAR, true);
     float imageScale = SLAM.GetImageScale();
 
     double t_resize = 0.f;
@@ -161,27 +167,16 @@ int main(int argc, char **argv)
             else if(ni>0)
                 T = tframe-vTimestampsCam[seq][ni-1];
 
-            //std::cout << "T: " << T << std::endl;
-            //std::cout << "ttrack: " << ttrack << std::endl;
-
-            if(ttrack<T) {
-                //std::cout << "usleep: " << (dT-ttrack) << std::endl;
+            if(ttrack<T)
                 usleep((T-ttrack)*1e6); // 1e6
-            }
         }
 
         if(seq < num_seq - 1)
         {
-            string kf_file_submap =  "./SubMaps/kf_SubMap_" + std::to_string(seq) + ".txt";
-            string f_file_submap =  "./SubMaps/f_SubMap_" + std::to_string(seq) + ".txt";
-            SLAM.SaveTrajectoryEuRoC(f_file_submap);
-            SLAM.SaveKeyFrameTrajectoryEuRoC(kf_file_submap);
-
             cout << "Changing the dataset" << endl;
 
             SLAM.ChangeDataset();
         }
-
     }
     // Stop all threads
     SLAM.Shutdown();
