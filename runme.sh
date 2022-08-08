@@ -205,4 +205,6 @@ if [ $a -eq 0 ]; then
 
     echo "Installation Complete. DO NOT THIS Terminal, please close and open new Terminal"
 
+    echo "Please refer to /supportFiles/testcmds.txt for details of sample test commands"
+
 fi
