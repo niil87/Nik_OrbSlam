@@ -1,11 +1,18 @@
 # Need to list how to get imu_intrinsics.yaml
 
-roscore & 
+AbortCheck() {
+   if [ $? -ne 0 ]; then echo "Error in installation hence aborting"; exit /b 0; fi
+}
 
-sudo cp /supportFiles/rs_d435_camera_with_model_Nik.launch  /opt/ros/${ROS_DISTRO}/share/realsense2_camera/launch/rs_d435_camera_with_model_Nik.launch
+sudo cp supportFiles/rs_d435_camera_with_model_Nik.launch  /opt/ros/${ROS_DISTRO}/share/realsense2_camera/launch/rs_d435_camera_with_model_Nik.launch
 
-roslaunch realsense2_camera rs_d435_camera_with_model_Nik.launch &
 
+# Difficulty in running these process, so skipping 
+#roscore &
+#sleep 5
+
+#roslaunch realsense2_camera rs_d435_camera_with_model_Nik.launch & 
+#sleep 10
 
 mkdir CalibrationInfo
 cd CalibrationInfo
@@ -14,14 +21,21 @@ cd CalibrationInfo
 # You need to provide the location of the calibration grid file, by default we have april grid file in supportFiles folder
 
 echo "Enter Full path location of grid file used for calibration"
+# /home/cnikh/Desktop/Git_Nikhil/Nik_OrbSlam/supportFiles/april_grid.yaml
 read CALIBRATION_GRID
+cp $CALIBRATION_GRID calibration_grid.yaml; AbortCheck
 
-cp $CALIBRATION_GRID calibration_grid.yaml
 
 ## Collect the bag using below command and the above yaml file 
 # rosbag record /camera/depth/image_rect_raw /camera/depth/camera_info /camera/depth/metadata /camera/depth/color/points /camera/color/image_raw /camera/color/camera_info /camera/color/metadata /camera/infra1/image_rect_raw /camera/infra1/camera_info /camera/infra1/metadata /camera/infra2/image_rect_raw /camera/infra2/camera_info /camera/infra2/metadata /camera/gyro/imu_info  /camera/gyro/metadata  /camera/gyro/sample /camera/accel/imu_info /camera/accel/metadata /camera/accel/sample /tf -O Recording
 
 # to view the bag, use "rqt_bag" 
+
+echo "Enter Full path location of bag file containing calibration images"
+# /home/cnikh/Desktop/Sample_Recording.bag
+read BAG_LOC
+cp $BAG_LOC Recording.bag; AbortCheck
+
 
 # Info on RGB Camera
 python3 ../kalibr_workspace/src/kalibr/aslam_offline_calibration/kalibr/python/kalibr_calibrate_cameras --bag Recording.bag --topics /camera/color/image_raw --models pinhole-radtan --target calibration_grid.yaml
