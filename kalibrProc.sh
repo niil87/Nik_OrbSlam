@@ -98,4 +98,10 @@ mv results-imucam-RecordingFinal.txt Results_INFRA_IMU.txt
 mv report-imucam-RecordingFinal.pdf Report_INFRA_IMU.pdf
 
 
-
+### Files we dont need
+## Config_COLOR.yaml and Config_IMU.yaml exist in Config_COLOR_IMU.yaml
+# rm -rf Config_RGB.yaml
+## Config_IMU.yaml exist in imu_intrinsics.yaml
+# rm -rf Config_IMU.yaml
+## Config_INFRA.yaml exist in Config_INFRA_IMU.yaml
+# rm -rf Config_INFRA.yaml
