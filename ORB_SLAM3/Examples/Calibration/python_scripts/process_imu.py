@@ -162,7 +162,7 @@ if __name__ == '__main__':
 
     myDataset = dataset(dirName)
     myDataset.interpolate()
-    myDataset.plotAcc()
+    # myDataset.plotAcc()   # Nik - file commented out as getting stuck with plt.show()
     myDataset.saveSynchronized()
 
     if len(sys.argv)==3:
