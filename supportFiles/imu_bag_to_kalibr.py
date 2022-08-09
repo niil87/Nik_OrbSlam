@@ -45,9 +45,6 @@ def CreateFile(*files) :
 			newline = newline + '\n'
 			f2.write(newline)
 
-		
-
-print("Hello world")
 
 file1 = open('IMU_Data/IMU/acc_stamp.txt','r')
 file2 = open('IMU_Data/IMU/acc_info.txt','r')
