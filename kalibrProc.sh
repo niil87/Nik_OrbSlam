@@ -6,6 +6,7 @@ AbortCheck() {
    if [ $? -ne 0 ]; then echo "Error in installation hence aborting"; exit /b 0; fi
 }
 
+
 sudo cp supportFiles/rs_d435_camera_with_model_Nik.launch  /opt/ros/${ROS_DISTRO}/share/realsense2_camera/launch/rs_d435_camera_with_model_Nik.launch
 
 # Below cp of file with fixes are needed for reported issue link below
@@ -39,6 +40,7 @@ sudo cp supportFiles/kalibr_bagcreater kalibr_workspace/src/kalibr/aslam_offline
 mkdir CalibrationInfo
 cd CalibrationInfo
 
+cp ../supportFiles/imu_intrinsics.yaml imu_intrinsics.yaml
 
 echo "Enter Full path location of grid file used for calibration"
 # /home/cnikh/Desktop/Git_Nikhil/Nik_OrbSlam/supportFiles/april_grid.yaml
@@ -84,47 +86,48 @@ rostopic echo -b Recording.bag -p /camera/accel/sample/linear_acceleration > IMU
 mkdir -p IMU_Data/cam0
 rostopic echo -b Recording.bag -p /camera/color/image_raw/header/stamp > IMU_Data/cam0/times_stamp.txt
 
-# the script to fix the file format issue
+# the script to fix the file format issue that Kalibr is expecting before creating bag file
 python3 ../supportFiles/imu_bag_to_kalibr.py; AbortCheck
 # script to generate the unified accel+gyro results
 python3 ../ORB_SLAM3/Examples/Calibration/python_scripts/process_imu.py IMU_Data; AbortCheck
 # Create bag with this IMU data (camera folder has no significance)
-python3 ../kalibr_workspace/src/kalibr/aslam_offline_calibration/kalibr/python/kalibr_bagcreater --folder IMU_Data --output-bag Bag_IMU_COLOR.bag
+python3 ../kalibr_workspace/src/kalibr/aslam_offline_calibration/kalibr/python/kalibr_bagcreater --folder IMU_Data --output-bag Bag_IMU_COLOR.bag; AbortCheck
+
 
 ### I DONT SEE DIFFERENCE IN IMU INFO EVEN WHEN IMAGES ARE OF DIFFERENT TIME STAMP HENCE SKIPPING INFRA
 ## Same process for infra camera also, as the timing could be mismatch with color
-# rostopic echo -b Recording.bag -p /camera/infra1/image_rect_raw/header/stamp > IMU_Data/cam0/times_stamp.txt
+# rostopic echo -b Recording.bag -p /camera/infra1/image_rect_raw/header/stamp > IMU_Data/cam0/times_stamp.txt; AbortCheck
 ## script to generate the unified accel+gyro results
-# python3 ../ORB_SLAM3/Examples/Calibration/python_scripts/process_imu.py IMU_Data
+# python3 ../ORB_SLAM3/Examples/Calibration/python_scripts/process_imu.py IMU_Data; AbortCheck
 ## Create bag with this IMU data and junk camera folder
-# python3 ../kalibr_workspace/src/kalibr/aslam_offline_calibration/kalibr/python/kalibr_bagcreater --folder IMU_Data --output-bag Bag_IMU_INFRA.bag
+# python3 ../kalibr_workspace/src/kalibr/aslam_offline_calibration/kalibr/python/kalibr_bagcreater --folder IMU_Data --output-bag Bag_IMU_INFRA.bag; AbortCheck
 
 
 
 #Merging bags to simplify kalibr processing
-wget https://www.clearpathrobotics.com/assets/downloads/support/merge_bag.py
-python3 merge_bag.py RecordingFinal.bag Recording.bag Bag_IMU_COLOR.bag
+wget https://www.clearpathrobotics.com/assets/downloads/support/merge_bag.py; AbortCheck
+python3 merge_bag.py RecordingFinal.bag Recording.bag Bag_IMU_COLOR.bag; AbortCheck
 
 
 # KEEP IN MIND THAT /imu0 the bag needs to be in specific format which is handled in previous steps
 # Info on RGB + IMU
-python3 ../kalibr_workspace/src/kalibr/aslam_offline_calibration/kalibr/python/kalibr_calibrate_imu_camera --bag RecordingFinal.bag --cam Config_COLOR.yaml --imu imu_intrinsics.yaml --target calibration_grid.yaml --dont-show-report
+python3 ../kalibr_workspace/src/kalibr/aslam_offline_calibration/kalibr/python/kalibr_calibrate_imu_camera --bag RecordingFinal.bag --cam Config_COLOR.yaml --imu imu_intrinsics.yaml --target calibration_grid.yaml --dont-show-report; AbortCheck
 
 # Renaming for multiple calibrations
-mv camchain-imucam-RecordingFinal.yaml Config_COLOR_IMU.yaml
-mv imu-RecordingFinal.yaml Config_IMU.yaml
-mv results-imucam-RecordingFinal.txt Results_COLOR_IMU.txt
-mv report-imucam-RecordingFinal.pdf Report_COLOR_IMU.pdf
+mv camchain-imucam-RecordingFinal.yaml Config_COLOR_IMU.yaml; AbortCheck
+mv imu-RecordingFinal.yaml Config_IMU.yaml; AbortCheck
+mv results-imucam-RecordingFinal.txt Results_COLOR_IMU.txt; AbortCheck
+mv report-imucam-RecordingFinal.pdf Report_COLOR_IMU.pdf; AbortCheck
 
 
 # Info on INFRA + IMU
-python3 ../kalibr_workspace/src/kalibr/aslam_offline_calibration/kalibr/python/kalibr_calibrate_imu_camera --bag RecordingFinal.bag --cam Config_INFRA.yaml --imu imu_intrinsics.yaml --target calibration_grid.yaml --dont-show-report
+python3 ../kalibr_workspace/src/kalibr/aslam_offline_calibration/kalibr/python/kalibr_calibrate_imu_camera --bag RecordingFinal.bag --cam Config_STEREO.yaml --imu imu_intrinsics.yaml --target calibration_grid.yaml --dont-show-report
 
 # Renaming for multiple calibrations
-mv camchain-imucam-RecordingFinal.yaml Config_INFRA_IMU.yaml
+mv camchain-imucam-RecordingFinal.yaml Config_STEREO_IMU.yaml; AbortCheck
 rm -rf imu-RecordingFinal.yaml   # duplicate hence not required
-mv results-imucam-RecordingFinal.txt Results_INFRA_IMU.txt
-mv report-imucam-RecordingFinal.pdf Report_INFRA_IMU.pdf
+mv results-imucam-RecordingFinal.txt Results_STEREO_IMU.txt; AbortCheck
+mv report-imucam-RecordingFinal.pdf Report_STEREO_IMU.pdf; AbortCheck
 
 
 ### Files we dont need
