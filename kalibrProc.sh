@@ -12,30 +12,39 @@ sudo cp supportFiles/rs_d435_camera_with_model_Nik.launch  /opt/ros/${ROS_DISTRO
 # https://github.com/ethz-asl/kalibr/issues/364
 sudo cp supportFiles/MulticamGraph.py kalibr_workspace/src/kalibr/aslam_offline_calibration/kalibr/python/kalibr_camera_calibration/MulticamGraph.py
 
-# Difficulty in running these process, so skipping 
+
+## Need to handle issue : https://github.com/ethz-asl/kalibr/issues/448
+## And https://stackoverflow.com/questions/8515053/csv-error-iterator-should-return-strings-not-bytes
+sudo cp supportFiles/kalibr_bagcreater kalibr_workspace/src/kalibr/aslam_offline_calibration/kalibr/python/kalibr_bagcreater
+
+####################################################################################################
+# Difficulty in running these process, so skipping collection of calibration images via script
 #roscore &
 #sleep 5
 
 #roslaunch realsense2_camera rs_d435_camera_with_model_Nik.launch & 
 #sleep 10
 
+# Generate the GRID yaml file using reference : https://github.com/ethz-asl/kalibr/wiki/calibration-targets
+# You need to provide the location of the calibration grid file, by default we have april grid file in supportFiles folder
+
+## Collect the bag using below command and the above yaml file 
+# rosbag record /camera/depth/image_rect_raw /camera/depth/camera_info /camera/depth/metadata /camera/depth/color/points /camera/color/image_raw /camera/color/camera_info /camera/color/metadata /camera/infra1/image_rect_raw /camera/infra1/camera_info /camera/infra1/metadata /camera/infra2/image_rect_raw /camera/infra2/camera_info /camera/infra2/metadata /camera/gyro/imu_info  /camera/gyro/metadata  /camera/gyro/sample /camera/accel/imu_info /camera/accel/metadata /camera/accel/sample /tf -O Recording
+
+# to view the bag, use "rqt_bag" 
+####################################################################################################
+
+
+
 mkdir CalibrationInfo
 cd CalibrationInfo
 
-
-# Generate the GRID yaml file using reference : https://github.com/ethz-asl/kalibr/wiki/calibration-targets
-# You need to provide the location of the calibration grid file, by default we have april grid file in supportFiles folder
 
 echo "Enter Full path location of grid file used for calibration"
 # /home/cnikh/Desktop/Git_Nikhil/Nik_OrbSlam/supportFiles/april_grid.yaml
 read CALIBRATION_GRID
 cp $CALIBRATION_GRID calibration_grid.yaml; AbortCheck
 
-
-## Collect the bag using below command and the above yaml file 
-# rosbag record /camera/depth/image_rect_raw /camera/depth/camera_info /camera/depth/metadata /camera/depth/color/points /camera/color/image_raw /camera/color/camera_info /camera/color/metadata /camera/infra1/image_rect_raw /camera/infra1/camera_info /camera/infra1/metadata /camera/infra2/image_rect_raw /camera/infra2/camera_info /camera/infra2/metadata /camera/gyro/imu_info  /camera/gyro/metadata  /camera/gyro/sample /camera/accel/imu_info /camera/accel/metadata /camera/accel/sample /tf -O Recording
-
-# to view the bag, use "rqt_bag" 
 
 echo "Enter Full path location of bag file containing calibration images"
 # /home/cnikh/Desktop/Sample_Recording.bag
@@ -79,7 +88,7 @@ rostopic echo -b Recording.bag -p /camera/color/image_raw/header/stamp > IMU_Dat
 python3 ../supportFiles/imu_bag_to_kalibr.py; AbortCheck
 # script to generate the unified accel+gyro results
 python3 ../ORB_SLAM3/Examples/Calibration/python_scripts/process_imu.py IMU_Data; AbortCheck
-# Create bag with this IMU data and junk camera folder
+# Create bag with this IMU data (camera folder has no significance)
 python3 ../kalibr_workspace/src/kalibr/aslam_offline_calibration/kalibr/python/kalibr_bagcreater --folder IMU_Data --output-bag Bag_IMU_COLOR.bag
 
 ### I DONT SEE DIFFERENCE IN IMU INFO EVEN WHEN IMAGES ARE OF DIFFERENT TIME STAMP HENCE SKIPPING INFRA
