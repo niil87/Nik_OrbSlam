@@ -1,8 +1,8 @@
 
 ### Pending work
 ## 1. fps is not stored in any of config files.
-## 2. distortion for fish eye, etc needs addition
-## 3. We need to create a new custom config file for other information like Viewer Parameters and ORB Extractor parameters
+## 2. distortion for fish eye, etc needs addition @ https://github.com/ethz-asl/kalibr/wiki/supported-models
+## 3. camera types refer to @ https://github.com/ethz-asl/kalibr/wiki/yaml-formats / https://github.com/ethz-asl/kalibr/wiki/supported-models
 
 
 import yaml
@@ -18,7 +18,6 @@ import re
 
 # Sample command line string
 # python3 kalibr_to_orbslam_yaml.py ~/Desktop/Nik_OrbSlam/ORB_SLAM3
-
 
 parser = argparse.ArgumentParser(description='Generating YAML files')
 parser.add_argument('path', type=str, help='path to ORB-SLAM3 folder')
@@ -51,7 +50,8 @@ commentHash = {"IMU.T_b_c1" : "\n# Transformation from body-frame (imu) to left 
                "IMU.NoiseAcc" : "# NoiseAcc unit : m/s^1.5\n",
                "IMU.GyroWalk" : "# GyroWalk unit : m/s^1.5\n",
                "IMU.AccWalk" : "# AccWalk unit : m/s^2.5\n",
-               "IMU.InsertKFsWhenLost" : "\n# Do not insert KFs when recently lost\n" }
+               "IMU.InsertKFsWhenLost" : "\n# Do not insert KFs when recently lost\n",
+               "IMU.Frequency" : "# Frequency unit : info/s\n" }
 
 
 def CreateYaml(SourceFile, Dict, TargetFile) :
@@ -149,6 +149,51 @@ def IdentifyKeys(SourceFile,Dict) :
 			elif (k == "update_rate") :
 				tempS = "IMU.Frequency"
 				Dest[tempS] = v
+			elif (k == "ORBextractor_nFeatures") :
+				tempS = "ORBextractor.nFeatures"
+				Dest[tempS] = v
+			elif (k == "ORBextractor_scaleFactor") :
+				tempS = "ORBextractor.scaleFactor"
+				Dest[tempS] = v
+			elif (k == "ORBextractor_nLevels") :
+				tempS = "ORBextractor.nLevels"
+				Dest[tempS] = v
+			elif (k == "ORBextractor_iniThFAST") :
+				tempS = "ORBextractor.iniThFAST"
+				Dest[tempS] = v
+			elif (k == "ORBextractor_minThFAST") :
+				tempS = "ORBextractor.minThFAST"
+				Dest[tempS] = v
+			elif (k == "Viewer_KeyFrameSize") :
+				tempS = "Viewer.KeyFrameSize"
+				Dest[tempS] = v
+			elif (k == "Viewer_KeyFrameLineWidth") :
+				tempS = "Viewer.KeyFrameLineWidth"
+				Dest[tempS] = v
+			elif (k == "Viewer_GraphLineWidth") :
+				tempS = "Viewer.GraphLineWidth"
+				Dest[tempS] = v
+			elif (k == "Viewer_PointSize") :
+				tempS = "Viewer.PointSize"
+				Dest[tempS] = v
+			elif (k == "Viewer_CameraSize") :
+				tempS = "Viewer.CameraSize"
+				Dest[tempS] = v
+			elif (k == "Viewer_CameraLineWidth") :
+				tempS = "Viewer.CameraLineWidth"
+				Dest[tempS] = v
+			elif (k == "Viewer_ViewpointX") :
+				tempS = "Viewer.ViewpointX"
+				Dest[tempS] = v
+			elif (k == "Viewer_ViewpointY") :
+				tempS = "Viewer.ViewpointY"
+				Dest[tempS] = v
+			elif (k == "Viewer_ViewpointZ") :
+				tempS = "Viewer.ViewpointZ"
+				Dest[tempS] = v
+			elif (k == "Viewer_ViewpointF") :
+				tempS = "Viewer.ViewpointF"
+				Dest[tempS] = v
 			else :
 				b = 1
 				# print("Missing handler for field: " + k)
@@ -183,57 +228,53 @@ yaml.add_representer(np.ndarray, opencv_matrix_representer)
 Dest = {}
 # the file that contains IMU related info
 yamlFile = "imu_intrinsics.yaml"
-Dest = IdentifyKeys(yamlFile,Dest)
+Dest = IdentifyKeys(yamlFile, Dest)
+
+yamlFile = "ORBex_and_Viewer.yaml"
+Dest = IdentifyKeys(yamlFile, Dest)
+
+
 
 yamlFile = "Config_COLOR_IMU.yaml"
-Dest = IdentifyKeys(yamlFile ,Dest)
-        
-# print(Dest)    
+Dest_color = IdentifyKeys(yamlFile, Dest)  
 
 # Adding some fields specifically for RGB-D 
-Dest["Camera.RGB"] = 1
+Dest_color["Camera.RGB"] = 1
+
+# print(Dest_color)
 
 # Overwriting yaml files for RGB-D, RGB-D-Inertial
 file_rgbd = orbslam_path + '/Examples/RGB-D/RealSense_D435i.yaml'
 new_file = "Kalibr_RGB-D.yaml"
-CreateYaml(file_rgbd, Dest, new_file)
+CreateYaml(file_rgbd, Dest_color, new_file)
 
 file_rgbd_inertial = orbslam_path + "/Examples/RGB-D-Inertial/RealSense_D435i.yaml"
 new_file = "Kalibr_RGB-D-Inertial.yaml"
-CreateYaml(file_rgbd, Dest, new_file)
+CreateYaml(file_rgbd_inertial, Dest_color, new_file)
 
-
-
-#####################################################################################################################################
-##### Rebuilding the destination dictionary file as we are now using stereo which obviously uses different cameras ##################
-
-Dest = {}
-# the file that contains IMU related info
-yamlFile = "imu_intrinsics.yaml"
-Dest = IdentifyKeys(yamlFile,Dest)
 
 yamlFile = "Config_STEREO_IMU.yaml"
-Dest = IdentifyKeys(yamlFile ,Dest)
+Dest_stereo = IdentifyKeys(yamlFile ,Dest)
 
-#print(Dest)
+#print(Dest_stereo)
 
 # Overwriting yaml files for Monocular, Monocular-Inertial, Stereo, Stereo-Inertial
 
 file_mono = orbslam_path + '/Examples/Monocular/RealSense_D435i.yaml'
 new_file = "Kalibr_Monocular.yaml"
-CreateYaml(file_mono, Dest, new_file)
+CreateYaml(file_mono, Dest_stereo, new_file)
 
 file_mono_intertial = orbslam_path + '/Examples/Monocular-Inertial/RealSense_D435i.yaml'
 new_file = "Kalibr_Monocular-Inertial.yaml"
-CreateYaml(file_mono_intertial, Dest, new_file)
+CreateYaml(file_mono_intertial, Dest_stereo, new_file)
 
 file_stereo = orbslam_path + '/Examples/Stereo/EuRoC.yaml'                     # RealSense_D435i.yaml has info only for 1 camera
 new_file = "Kalibr_Stereo.yaml"
-CreateYaml(file_stereo, Dest, new_file)
+CreateYaml(file_stereo, Dest_stereo, new_file)
 
 file_stereo_inertial = orbslam_path + "/Examples/Stereo-Inertial/EuRoC.yaml"   # RealSense_D435i.yaml has info only for 1 camera
 new_file = "Kalibr_Stereo-Inertial.yaml"
-CreateYaml(file_stereo_inertial, Dest, new_file)
+CreateYaml(file_stereo_inertial, Dest_stereo, new_file)
 
 
 print("Files Generated!")

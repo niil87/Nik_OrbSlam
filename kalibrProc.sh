@@ -40,7 +40,6 @@ sudo cp supportFiles/kalibr_bagcreater kalibr_workspace/src/kalibr/aslam_offline
 mkdir CalibrationInfo
 cd CalibrationInfo
 
-cp ../supportFiles/imu_intrinsics.yaml imu_intrinsics.yaml
 
 echo "Enter Full path location of grid file used for calibration"
 # /home/cnikh/Desktop/Git_Nikhil/Nik_OrbSlam/supportFiles/april_grid.yaml
@@ -52,6 +51,16 @@ echo "Enter Full path location of bag file containing calibration images"
 # /home/cnikh/Desktop/Sample_Recording.bag
 read BAG_LOC
 cp $BAG_LOC Recording.bag; AbortCheck
+
+
+
+## NEED WAY OR INFO TO GET imu_intrinsics.yaml
+cp ../supportFiles/imu_intrinsics.yaml imu_intrinsics.yaml
+
+## Custome yaml file to ensure ORBextractor and Viewer parameters are updated for all files accurately
+cp ../supportFiles/ORBex_and_Viewer.yaml ORBex_and_Viewer.yaml
+
+
 
 
 # Info on RGB Camera
@@ -109,6 +118,8 @@ wget https://www.clearpathrobotics.com/assets/downloads/support/merge_bag.py; Ab
 python3 merge_bag.py RecordingFinal.bag Recording.bag Bag_IMU_COLOR.bag; AbortCheck
 
 
+
+# https://github.com/ethz-asl/kalibr/wiki/Camera-IMU-calibration
 # KEEP IN MIND THAT /imu0 the bag needs to be in specific format which is handled in previous steps
 # Info on RGB + IMU
 python3 ../kalibr_workspace/src/kalibr/aslam_offline_calibration/kalibr/python/kalibr_calibrate_imu_camera --bag RecordingFinal.bag --cam Config_COLOR.yaml --imu imu_intrinsics.yaml --target calibration_grid.yaml --dont-show-report; AbortCheck
