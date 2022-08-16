@@ -130,10 +130,15 @@ mv results-imucam-RecordingFinal.txt Results_STEREO_IMU.txt; AbortCheck
 mv report-imucam-RecordingFinal.pdf Report_STEREO_IMU.pdf; AbortCheck
 
 
-### Files we dont need
-## Config_COLOR.yaml and Config_IMU.yaml exist in Config_COLOR_IMU.yaml
-# rm -rf Config_RGB.yaml
-## Config_IMU.yaml exist in imu_intrinsics.yaml
-# rm -rf Config_IMU.yaml
-## Config_INFRA.yaml exist in Config_INFRA_IMU.yaml
-# rm -rf Config_INFRA.yaml
+### Some files we dont need as we have superset files
+# Config_COLOR.yaml and Config_IMU.yaml exist in Config_COLOR_IMU.yaml
+rm -rf Config_COLOR.yaml
+# Config_IMU.yaml exist in imu_intrinsics.yaml
+rm -rf Config_IMU.yaml
+# Config_STEREO.yaml exist in Config_STEREO_IMU.yaml
+rm -rf Config_STEREO.yaml
+
+
+## Final script to overwrite fields in yaml files to be used by orb-slam based on kalibr results.
+python3 ../supportFiles/kalibr_to_orbslam_yaml.py ~/Desktop/Nik_OrbSlam/ORB_SLAM3; AbortCheck
+
