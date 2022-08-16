@@ -150,6 +150,16 @@ rm -rf Config_IMU.yaml
 rm -rf Config_STEREO.yaml
 
 
+## Relying on METADATA to get the fps
+## There is an issue with color running at 30fps, need to retest with 20fps
+rostopic echo -b Recording.bag -p /camera/color/metadata -n 1 > metadata_color.txt  # color seems to be running at slightly lower fps!! even after launch file was correctly configured!
+rostopic echo -b Recording.bag -p /camera/infra1/metadata -n 1 > metadata_infra.txt
+
+
+
 ## Final script to overwrite fields in yaml files to be used by orb-slam based on kalibr results.
 python3 ../supportFiles/kalibr_to_orbslam_yaml.py ~/Desktop/Nik_OrbSlam/ORB_SLAM3; AbortCheck
+
+
+
 

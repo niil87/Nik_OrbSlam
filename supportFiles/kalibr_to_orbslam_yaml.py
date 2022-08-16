@@ -1,8 +1,6 @@
-
 ### Pending work
-## 1. fps is not stored in any of config files.
-## 2. distortion for fish eye, etc needs addition @ https://github.com/ethz-asl/kalibr/wiki/supported-models
-## 3. camera types refer to @ https://github.com/ethz-asl/kalibr/wiki/yaml-formats / https://github.com/ethz-asl/kalibr/wiki/supported-models
+## 1. distortion for fish eye, etc needs addition @ https://github.com/ethz-asl/kalibr/wiki/supported-models
+## 2. camera types refer to @ https://github.com/ethz-asl/kalibr/wiki/yaml-formats / https://github.com/ethz-asl/kalibr/wiki/supported-models
 
 
 import yaml
@@ -234,12 +232,25 @@ yamlFile = "ORBex_and_Viewer.yaml"
 Dest = IdentifyKeys(yamlFile, Dest)
 
 
+############ WORKING ON COLOR CAMERA SPECIFIC INFO ###################################
 
 yamlFile = "Config_COLOR_IMU.yaml"
 Dest_color = IdentifyKeys(yamlFile, Dest)  
 
 # Adding some fields specifically for RGB-D 
 Dest_color["Camera.RGB"] = 1
+
+## Get fps from metadata file if it exist
+color_fps = 0
+try : 
+    with open('metadata_color.txt', 'r') as searchfile:
+        for line in searchfile:
+            if "actual_fps" in line:
+                m = re.findall(r'"actual_fps":[0-9]+', line)[0]
+                color_fps = int(re.search(r'[0-9]+',m)[0])
+                Dest_color["Camera.fps"] = color_fps
+except :
+    print("No metadata_color.txt file available, not modifying Camera.fps in RGB-D yaml file")
 
 # print(Dest_color)
 
@@ -253,8 +264,23 @@ new_file = "Kalibr_RGB-D-Inertial.yaml"
 CreateYaml(file_rgbd_inertial, Dest_color, new_file)
 
 
+
+############ WORKING ON INFRA CAMERA SPECIFIC INFO ###################################
 yamlFile = "Config_STEREO_IMU.yaml"
 Dest_stereo = IdentifyKeys(yamlFile ,Dest)
+
+
+## Get fps from metadata file if it exist
+infra_fps = 0
+try : 
+    with open('metadata_infra.txt', 'r') as searchfile:
+        for line in searchfile:
+            if "actual_fps" in line:
+                m = re.findall(r'"actual_fps":[0-9]+', line)[0]
+                infra_fps = int(re.search(r'[0-9]+',m)[0])
+                Dest_color["Camera.fps"] = infra_fps
+except :
+    print("No metadata_color.txt file available, not modifying Camera.fps in Monocular or Stereo yaml file")
 
 #print(Dest_stereo)
 
