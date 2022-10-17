@@ -3,7 +3,7 @@
 
 
 AbortCheck() {
-   if [ $? -ne 0 ]; then echo "Error in installation hence aborting"; exit /b 0; fi
+   if [ $? -ne 0 ]; then echo "Error in Calibration process hence aborting. If you see a failure to converge in optimization [Optimization diverged possibly due to a bad initialization], please rerun"; exit /b 0; fi
 }
 
 # this is to disable the emitter (for depth sensing) to avoid dots on screen during collection of calibration images. 
@@ -36,20 +36,21 @@ read ENTER_CMD
 # to view the bag, use "rqt_bag" 
 ####################################################################################################
 
-
+## removing any older files under CalibrationInfo folder as it interrupts the process sometimes.
+rm -rf CalibrationInfo
 
 mkdir CalibrationInfo
 cd CalibrationInfo
 
 
 echo "Enter Full path location of grid file (eg. april_grid.yaml) used for calibration"
-# /home/cnikh/Desktop/Git_Nikhil/Nik_OrbSlam/supportFiles/april_grid.yaml
+# ../supportFiles/april_grid.yaml
 read CALIBRATION_GRID
 cp $CALIBRATION_GRID calibration_grid.yaml; AbortCheck
 
 
 echo "Enter Full path location of bag file containing calibration images"
-# /home/cnikh/Desktop/Sample_Recording.bag
+# ../../Desktop/Recording.bag  ## unfortunately I cannot keep this file in GIT as its too big in size.
 read BAG_LOC
 cp $BAG_LOC Recording.bag; AbortCheck
 
