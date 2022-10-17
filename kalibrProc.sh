@@ -6,7 +6,7 @@ AbortCheck() {
    if [ $? -ne 0 ]; then echo "Error in installation hence aborting"; exit /b 0; fi
 }
 
-# this is to disable the emitter to avoid dots on screen during collection of calibration images. 
+# this is to disable the emitter (for depth sensing) to avoid dots on screen during collection of calibration images. 
 # this line was added to original file "rs_d435_camera_with_model.launch" : <rosparam> /camera/stereo_module/emitter_enabled: 0 </rosparam>
 sudo cp supportFiles/rs_d435_camera_with_model_Nik.launch  /opt/ros/${ROS_DISTRO}/share/realsense2_camera/launch/rs_d435_camera_with_model_Nik.launch
 
@@ -157,9 +157,8 @@ rostopic echo -b Recording.bag -p /camera/color/metadata -n 1 > metadata_color.t
 rostopic echo -b Recording.bag -p /camera/infra1/metadata -n 1 > metadata_infra.txt
 
 
-
 ## Final script to overwrite fields in yaml files to be used by orb-slam based on kalibr results.
-python3 ../supportFiles/kalibr_to_orbslam_yaml.py ~/Desktop/Nik_OrbSlam/ORB_SLAM3; AbortCheck
+python3 ../supportFiles/kalibr_to_orbslam_yaml.py ../ORB_SLAM3; AbortCheck
 
 
 
