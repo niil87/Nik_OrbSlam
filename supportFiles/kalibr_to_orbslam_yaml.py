@@ -14,13 +14,15 @@ import argparse
 import re
 
 
-# Sample command line string
-# python3 kalibr_to_orbslam_yaml.py ~/Desktop/Nik_OrbSlam/ORB_SLAM3
+# Sample command line string after making sure you cd to ORB_SLAM3 folder
+# python3 kalibr_to_orbslam_yaml.py <path to ORB_SLAM3>
 
 parser = argparse.ArgumentParser(description='Generating YAML files')
 parser.add_argument('path', type=str, help='path to ORB-SLAM3 folder')
 args = parser.parse_args()
 orbslam_path = args.path
+
+print(orbslam_path)
 
 k2o_hash = {"pinhole" : "PinHole", "rectified" : "Rectified"}
 
@@ -303,5 +305,10 @@ new_file = "Kalibr_Stereo-Inertial.yaml"
 CreateYaml(file_stereo_inertial, Dest_stereo, new_file)
 
 
-print("Files Generated!")
-
+print("New Files Generated under CalibrationInfo folder! Please copy the files or rename depending on your usage. The file name and its intendend location listed below")
+print("Kalibr_RGB-D.yaml              => ../ORB_SLAM3/Examples/RGB-D/ ")
+print("Kalibr_RGB-D-Inertial.yaml     => ../ORB_SLAM3/Examples/RGB-D-Inertial/ ")
+print("Kalibr_Monocular.yaml          => ../ORB_SLAM3/Examples/Monocular/ ")
+print("Kalibr_Monocular-Inertial.yaml => ../ORB_SLAM3/Examples/Monocular-Inertial/ ")
+print("Kalibr_Stereo.yaml             => ../ORB_SLAM3/Examples/Stereo/ ")
+print("Kalibr_Stereo-Inertial.yaml    => ../ORB_SLAM3/Examples/Stereo-Inertial/ ")
