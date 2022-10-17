@@ -63,18 +63,34 @@ If you are having difficulting generating the file, there is copy available at
 ```
 Please refer link @ https://github.com/ethz-asl/kalibr/wiki/calibration-targets for more details.
 
-#### Setting up camera for data + image collection
-We will use ros to capture data into bags, and process on bags later on.
+#### Running Kalibr bash script to perform file manipulation and keep the system ready for calibration files
+```
+chmod +x kalibrProc.sh 
+./kalibrProc.sh
+```
+
+
+#### Setting up camera for data + image collection for calibration
+Using new terminal window, we will use ros to capture data into bags, and process on bags later on. Before running "rosbag record", please make sure you are famaliar with camera movements as shown in https://www.youtube.com/watch?app=desktop&v=puNXsnrYWTY&ab_channel=SimpleKernel
 ```
 ## run roscore to initialize ros
 roscore
+
 ## run below command in separate terminal for ros to latch on to the camera
 roslaunch realsense2_camera rs_d435_camera_with_model_Nik.launch & 
+
 ## run below command to collect only necessary info for calibration
 rosbag record /camera/depth/image_rect_raw /camera/depth/camera_info /camera/depth/metadata /camera/depth/color/points /camera/color/image_raw /camera/color/camera_info /camera/color/metadata /camera/infra1/image_rect_raw /camera/infra1/camera_info /camera/infra1/metadata /camera/infra2/image_rect_raw /camera/infra2/camera_info /camera/infra2/metadata /camera/gyro/imu_info  /camera/gyro/metadata  /camera/gyro/sample /camera/accel/imu_info /camera/accel/metadata /camera/accel/sample /tf -O Recording
-# to view the bag, use "rqt_bag" 
+
+## to view the contents of the bag after completion of data collection, use "rqt_bag" 
 ```
-https://www.youtube.com/watch?app=desktop&v=puNXsnrYWTY&ab_channel=SimpleKernel
+
+Once you are done with above steps, please hit enter on the terminal window that you used for running kalibrProc.sh
+
+After collecting all the necessary files and performing calibration, a new set of yaml files will be generated and dispayed in terminal window display.
+
+
+
 
 ## References: 
 [1] https://dev.intelrealsense.com/docs/self-calibration-for-depth-cameras
