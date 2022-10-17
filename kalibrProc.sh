@@ -6,7 +6,8 @@ AbortCheck() {
    if [ $? -ne 0 ]; then echo "Error in installation hence aborting"; exit /b 0; fi
 }
 
-
+# this is to disable the emitter to avoid dots on screen during collection of calibration images. 
+# this line was added to original file "rs_d435_camera_with_model.launch" : <rosparam> /camera/stereo_module/emitter_enabled: 0 </rosparam>
 sudo cp supportFiles/rs_d435_camera_with_model_Nik.launch  /opt/ros/${ROS_DISTRO}/share/realsense2_camera/launch/rs_d435_camera_with_model_Nik.launch
 
 # Below cp of file with fixes are needed for reported issue link below
@@ -18,13 +19,13 @@ sudo cp supportFiles/MulticamGraph.py kalibr_workspace/src/kalibr/aslam_offline_
 ## And https://stackoverflow.com/questions/8515053/csv-error-iterator-should-return-strings-not-bytes
 sudo cp supportFiles/kalibr_bagcreater kalibr_workspace/src/kalibr/aslam_offline_calibration/kalibr/python/kalibr_bagcreater
 
+echo "Automated collection of images and data for calibration is commented out, please perform steps manually. Hit enter when done with manual steps"
+read ENTER_CMD
 ####################################################################################################
 # Difficulty in running these process, so skipping collection of calibration images via script
 #roscore &
-#sleep 5
 
 #roslaunch realsense2_camera rs_d435_camera_with_model_Nik.launch & 
-#sleep 10
 
 # Generate the GRID yaml file using reference : https://github.com/ethz-asl/kalibr/wiki/calibration-targets
 # You need to provide the location of the calibration grid file, by default we have april grid file in supportFiles folder
@@ -41,7 +42,7 @@ mkdir CalibrationInfo
 cd CalibrationInfo
 
 
-echo "Enter Full path location of grid file used for calibration"
+echo "Enter Full path location of grid file (eg. april_grid.yaml) used for calibration"
 # /home/cnikh/Desktop/Git_Nikhil/Nik_OrbSlam/supportFiles/april_grid.yaml
 read CALIBRATION_GRID
 cp $CALIBRATION_GRID calibration_grid.yaml; AbortCheck
