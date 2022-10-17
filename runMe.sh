@@ -66,6 +66,7 @@ if [ $a -eq 0 ]; then
         #source ~/.bashrc
         eval "$(cat ~/.bashrc | tail -n +10)"
         python3 -c "import cv2; print(cv2.__version__)"; AbortCheck
+        echo "Resolved import cv2 issue!"
     fi
 
 
