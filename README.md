@@ -1,12 +1,12 @@
 # Nik_OrbSlam
 
-Welcome to this repository. This repository was created as an effort to support Research effort at Lund University. There are two bash script provided along with some support files to help with speeding up ORB-SLAM3 research efforts without need to worry about missing packages
+This repository was created as an effort to simplify the Kalibr and ORB-SLAM3 processes as part of research work at Lund University. There are two bash script provided along with some support files to help with speeding up ORB-SLAM3 research efforts without need to worry about issues due to missing dependencies.
 
-The original files picked up from https://github.com/UZ-SLAMLab/ORB_SLAM3 and we thank the contributors for the original files. This repository contains fixes necessary for the packages to work on Ubuntu 20.04 as the original repository are either missing some files or some fixes.
+The original files picked up from ORB-SLAM3 repository [3] and Kalibr repository [4] and I thank the respective contributors for the effort in building the toolkits. This repository contains fixes necessary for the toolkits to work in tandem and on Ubuntu 20.04 [Last Tested on 2022-10-18] as the original repository are either missing some files or fixes for installation/runtime issues and Calibration files (YAML files) formats are not the same.
 
-The bash script "runMe.sh" installs all the packages in one go. Please note that this is a simple bash script and does not handle runtime error correction. It can only detect errors and will stop at point when an error is detected. By error I mean, program fails to run or installation failed, etc.
+The bash script "runMe.sh" installs all the necessary packages (both ORB-SLAM3 and Kalibr) in one go with occassion request for user password. Please note that this is a simple bash script and does not handle runtime error correction. It can only detect errors and will stop at point when an error is detected. By error I mean either the test program fails to run or installation sub-step failed. This script will also download a small subset of EuroC data set [5] which can be used to verify the toolkits. Please attempt on a newly installed ubuntu station or station which doesnt have any older packages, as the bash script cannot fix errors. 
 
-The second bash script "kalibrProc.sh" is to help with extraction of calibration related information required for generating the yaml files. 
+The second bash script "kalibrProc.sh" is to help with extraction of calibration related information required for generating the YAML files. These YAML files are then converted to format recognised by ORB-SLAM3 toolkit.
 
 
 ## Requirement: 
@@ -49,19 +49,20 @@ Unfortunately, we couldnt automate the entire process; this includes generating 
 The link to downloading pregenerated grid images is broken. Assuming that you already installed necessary components via "Steps to install ORB-SLAM3" details listed above, you can use below command to navigate to kalibr_create_target_pdf script and run the necessary command to generate the custom april gril image file.  
 ```
 ## Navigate to location of kalibr_create_target_pdf file
-cd /kalibr_workspace/devel/lib/kalibr
+cd kalibr_workspace/devel/lib/kalibr
 
-## Executing python script. Please provide approprite values for [NUM_COLS], [NUM_ROWS], [TAG_WIDTH_M], [TAG_SPACING_PERCENT]. (Eg 4,4,10,0.1)
+## Executing python script. Please provide approprite values for [NUM_COLS], [NUM_ROWS], [TAG_WIDTH_M], [TAG_SPACING_PERCENT]. (Eg 6,6,0.02,0.3)
 python3 kalibr_create_target_pdf --type apriltag --nx [NUM_COLS] --ny [NUM_ROWS] --tsize [TAG_WIDTH_M] --tspace [TAG_SPACING_PERCENT]
 
 ## To return to main folder. The newly generated file april_grid.yaml will be located in same path as kalibr_create_target_pdf file.
 cd ../../../..
 ```
-If you are having difficulting generating the file, there is copy available at 
+After generating the april grid PDF image file, please create the corresponding YAML file for Kalibr. If you are having difficulting generating the file, there is copy of both the PDF and YAML file in link provided below 
 ```
 <Nik_Orbslam path>/supportFiles/april_grid.yaml
+<Nik_Orbslam path>/supportFiles/april_grid_target.pdf
 ```
-Please refer link @ https://github.com/ethz-asl/kalibr/wiki/calibration-targets for more details.
+Please refer wiki link [7] provided by Kalibr for more details on other grid types.
 
 #### Running Kalibr bash script to perform file manipulation and keep the system ready for calibration files
 ```
@@ -71,7 +72,7 @@ chmod +x kalibrProc.sh
 The process will pause after initial file manipulation keeping the system ready for next task. Please proceed to next task and will follow later on when to hit enter in this terminal window
 
 #### Setting up camera for data + image collection for calibration
-Using new terminal window, we will use ros to capture data into bags, and process on bags later on. Before running "rosbag record", please make sure you are famaliar with camera movements as shown in https://www.youtube.com/watch?app=desktop&v=puNXsnrYWTY&ab_channel=SimpleKernel
+Using new terminal window, we will use ros to capture data into bags, and process on bags later on. Before running "rosbag record", please make sure you are famaliar with camera movements as shown in the youtube video [6] provided by Kalibr.
 ```
 ## run roscore to initialize ros
 roscore
@@ -85,9 +86,9 @@ rosbag record /camera/depth/image_rect_raw /camera/depth/camera_info /camera/dep
 ## to view the contents of the bag after completion of data collection, use "rqt_bag" 
 ```
 
-Once you are done with above steps, please hit enter on the terminal window that you used for running kalibrProc.sh
+Once you are done with above steps, please hit enter on the terminal window that you used for running kalibrProc.sh to continue with calibration data extraction.
 
-After collecting all the necessary files and performing calibration, a new set of yaml files will be generated and dispayed in terminal window display.
+After collecting all the necessary files and performing calibration, a new set of YAML files will be generated and dispayed in the terminal window display.
 
 
 
@@ -96,4 +97,14 @@ After collecting all the necessary files and performing calibration, a new set o
 [1] https://dev.intelrealsense.com/docs/self-calibration-for-depth-cameras
 
 [2] https://www.intelrealsense.com/wp-content/uploads/2019/07/Intel_RealSense_Depth_D435i_IMU_Calibration.pdf
+
+[3] https://github.com/UZ-SLAMLab/ORB_SLAM3
+
+[4] https://github.com/ethz-asl/kalibr
+
+[5] https://projects.asl.ethz.ch/datasets/doku.php?id=kmavvisualinertialdatasets
+
+[6] https://www.youtube.com/watch?app=desktop&v=puNXsnrYWTY&ab_channel=SimpleKernel
+
+[7] https://github.com/ethz-asl/kalibr/wiki/calibration-targets
 
