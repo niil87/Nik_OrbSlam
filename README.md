@@ -68,7 +68,7 @@ Please refer link @ https://github.com/ethz-asl/kalibr/wiki/calibration-targets 
 chmod +x kalibrProc.sh 
 ./kalibrProc.sh
 ```
-
+The process will pause after initial file manipulation keeping the system ready for next task. Please proceed to next task and will follow later on when to hit enter in this terminal window
 
 #### Setting up camera for data + image collection for calibration
 Using new terminal window, we will use ros to capture data into bags, and process on bags later on. Before running "rosbag record", please make sure you are famaliar with camera movements as shown in https://www.youtube.com/watch?app=desktop&v=puNXsnrYWTY&ab_channel=SimpleKernel
