@@ -1,3 +1,5 @@
+// the below commands are to test ORB-SLAM3 using EuroC Dataset to ensure the toolkit works. You should see two new files generated in the end, the Frame and Key-Frame text file, with the file name as f_dataset-MH01_xxx.txt and kf_dataset-MH01_xxx.txt where xxx will represent which mode you select (stereo/mono/mono-intertial)
+
 // cd into orb slam3 folder before running any of executables.
 cd ORB_SLAM3
 
