@@ -43,7 +43,7 @@ a.	Depth sensing: With degradation, we will observe bumpiness for flat surfaces 
 b.	IMU sensing: With degradation, we will observe a high noise level in the measurements, non-zero bias, or cross-correlation in the axis. We use the python script provided by Intel and described in detail in [2]
 
 ### Calibration for obtaining Transformation matrix, camera calibration, distortion parameters, noise information, etc
-Unfortunately, we couldnt automate the entire process, including generating the grid file and capturing images for initial transformation matrix. We have listed down the steps needed to be performed prior to running "kalibrProc.sh" script. 
+Unfortunately, we couldnt automate the entire process; this includes generating the grid image file and capturing data + images for calibration using the grid image. We have listed down the steps needed to be performed prior to and while running "kalibrProc.sh" script. 
 
 #### Generating April Grid
 The link to downloading pregenerated grid images is broken. Assuming that you already installed necessary components via "Steps to install ORB-SLAM3" details listed above, you can use below command to navigate to kalibr_create_target_pdf script and run the necessary command to generate the custom april gril image file.  
