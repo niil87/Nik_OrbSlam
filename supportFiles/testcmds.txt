@@ -13,7 +13,7 @@ cd ORB_SLAM3
 
 
 
-// 3 examples of orb-slam3 execution without ros
+// 3 examples of orb-slam3 execution using ros
 // Currently "Mono" isnt working
 
 rosrun ORB_SLAM3 Stereo_Inertial Vocabulary/ORBvoc.txt Examples/Stereo-Inertial/EuRoC.yaml false
