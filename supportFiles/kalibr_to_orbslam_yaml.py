@@ -53,6 +53,33 @@ commentHash = {"IMU.T_b_c1" : "\n# Transformation from body-frame (imu) to left 
                "IMU.InsertKFsWhenLost" : "\n# Do not insert KFs when recently lost\n",
                "IMU.Frequency" : "# Frequency unit : info/s\n" }
 
+def FixMatrix(File) :
+	f2 = open("Copy.yaml", "w")
+	f1 = open(File,"r") 
+
+	while True :
+		line = f1.readline()
+		if not line:
+			break
+
+		if "data:" in line:
+			text = "  " + line.strip() + " ["
+			for i in range(16):
+				line = f1.readline()
+				line = (line.strip())[2:]
+				text = text + line + ","
+				if i == 15:
+					text = text[:-1] + "]\n"
+				elif ((i+1)%4 == 0):
+					text = text + "\n         "
+			f2.write(text)
+		else :
+			f2.write(line)
+
+	f1.close()
+	f2.close()
+	os.system("cp " + "Copy.yaml" + " " + File)
+
 
 def CreateYaml(SourceFile, Dict, TargetFile) :
 	os.system("cp " + SourceFile + " " + "Copy.yaml")
@@ -304,6 +331,13 @@ file_stereo_inertial = orbslam_path + "/Examples/Stereo-Inertial/EuRoC.yaml"   #
 new_file = "Kalibr_Stereo-Inertial.yaml"
 CreateYaml(file_stereo_inertial, Dest_stereo, new_file)
 
+
+## due to bug with yaml.dump or some other files, https://stackoverflow.com/questions/73374036/opencv-python-api-filestorage-unable-to-get-matrix-in-right-form
+## new function was created to fix the file for structures that are to be represented in matrix form
+FixMatrix("Kalibr_Monocular-Inertial.yaml")
+FixMatrix("Kalibr_RGB-D-Inertial.yaml")
+FixMatrix("Kalibr_Stereo.yaml")
+FixMatrix("Kalibr_Stereo-Inertial.yaml")
 
 print("New Files Generated under CalibrationInfo folder! Please copy the files or rename depending on your usage. The file name and its intendend location listed below")
 print("Kalibr_RGB-D.yaml              => ../ORB_SLAM3/Examples/RGB-D/ ")
