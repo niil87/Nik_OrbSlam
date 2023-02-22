@@ -1,6 +1,9 @@
 # Nik_OrbSlam
 
-This repository was created as an effort to simplify the Kalibr and ORB-SLAM3 processes as part of research work in collaboration with Ilayda Yaman at Lund University. There are two bash script provided along with some support files to help with speeding up ORB-SLAM3 research efforts without need to worry about issues due to missing dependencies.
+This repository was created as an effort to simplify the Kalibr and ORB-SLAM3 processes as part of research work in collaboration with Ilayda Yaman at Lund University. 
+Publication : https://arxiv.org/abs/2302.05309
+
+There are two bash script provided along with some support files to help with speeding up ORB-SLAM3 research efforts without need to worry about issues due to missing dependencies.
 
 The original files picked up from ORB-SLAM3 repository [3] and Kalibr repository [4] and I thank the respective contributors for the effort in building the toolkits. This repository contains fixes necessary for the toolkits to work in tandem and on Ubuntu 20.04 [Last Tested on 2022-10-18] as the original repository are either missing some files or fixes for installation/runtime issues and YAML file formats are not the same for Kalibr vs ORB-SLAM3.
 
